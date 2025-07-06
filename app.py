@@ -18,7 +18,7 @@ def generate():
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4o",
+           model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You generate clean HTML websites from prompts."},
                 {"role": "user", "content": prompt}
