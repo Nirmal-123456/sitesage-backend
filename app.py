@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @app.route("/generate", methods=["POST"])
 def generate():
@@ -16,7 +16,7 @@ def generate():
         return jsonify({"error": "No prompt provided"}), 400
 
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-4o",
             messages=[
                 {"role": "system", "content": "You generate HTML websites from prompts."},
@@ -29,7 +29,8 @@ def generate():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# ✅ This is required for Render to bind the port
+# Render port fix
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
